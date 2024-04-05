@@ -1,10 +1,15 @@
 <?php
+// Database connection settings
+$server   = 'localhost';
 $username = 'root';
-$server = 'localhost';
 $password = '';
 $database = 'forum';
+
+// Create connection
 $con = mysqli_connect($server, $username, $password, $database);
+
+// Check connection
 if (!$con) {
-    echo "Error" . mysqli_connect_error();
-    exit;
+    die("Database connection failed: " . mysqli_connect_error());
 }
+?>

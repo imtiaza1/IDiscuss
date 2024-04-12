@@ -1,29 +1,39 @@
 <?php
+session_start(); // Make sure session is started before using $_SESSION
+
 $successAlert = false;
 $errorAlert = false;
 $emailIsNotFound = false;
 
 if (isset($_POST['loginSubmit'])) {
     include('_connection.php');
-    $email = $_POST['email'];
+
+    // Sanitize input
+    $email = mysqli_real_escape_string($con, $_POST['email']);
     $pass = $_POST['pass'];
-    $select = "SELECT * FROM users WHERE email='$email'";
-    $sql = mysqli_query($con, $select);
-    $result = mysqli_num_rows($sql);
-    if ($result > 0) {
-        while ($row = mysqli_fetch_array($sql)) {
-            // Check if the password is correct
-            $cheackPass = password_verify($pass, $row['pass']);
-            if ($cheackPass) {
-                $_SESSION['user'] = true;
-                $_SESSION['name'] = $row['name'];
-                $_SESSION['id'] = $row['id'];
-                $successAlert = true;
-            } else {
-                $errorAlert = true;
-            }
+
+    // Check if email exists
+    $query = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($con, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $user = mysqli_fetch_assoc($result);
+
+        // Verify password
+        if (password_verify($pass, $user['pass'])) {
+            $_SESSION['user'] = true;
+            $_SESSION['name'] = $user['name'];
+            $_SESSION['id'] = $user['id'];
+            $successAlert = true;
+
+            // Optional: Redirect after login
+            // header('Location: dashboard.php');
+            // exit();
+        } else {
+            $errorAlert = true; // Incorrect password
         }
     } else {
-        $emailIsNotFound = true;
+        $emailIsNotFound = true; // No user with this email
     }
 }
+?>

@@ -1,19 +1,27 @@
 <?php
 include('_connection.php');
 $ShowAlert = false;
+
 if (isset($_POST['submit'])) {
-    $thread_id = $_GET['threadID'];
-    $comments = $_POST['comments'];
-    $comments = strip_tags($_POST['comments']);
+    // Validate and sanitize inputs
+    $thread_id = isset($_GET['threadID']) ? (int)$_GET['threadID'] : 0;
+    $comments = strip_tags(trim($_POST['comments']));
+    $sno = isset($_POST['sno']) ? (int)$_POST['sno'] : 0;
 
-    $sno = $_POST['sno'];
+    // Basic validation
+    if ($thread_id > 0 && $sno > 0 && !empty($comments)) {
+        $insert = "INSERT INTO `comments` (`comments_content`, `threads_id`, `comments_by`, `comments_time`) 
+                   VALUES ('$comments', '$thread_id', '$sno', current_timestamp())";
 
-    $insert = "INSERT INTO `comments` (`comments_content`, `threads_id`, `comments_by`, `comments_time`) VALUES ('$comments', '$thread_id', '$sno', current_timestamp());";
-    $sql = mysqli_query($con, $insert);
-    if ($sql) {
-        $ShowAlert = true;
+        $sql = mysqli_query($con, $insert);
+
+        if ($sql) {
+            $ShowAlert = true;
+        } else {
+            echo "Error: " . mysqli_error($con);
+        }
     } else {
-        echo "error";
-        $ShowAlert = false;
+        echo "Invalid input data.";
     }
 }
+?>

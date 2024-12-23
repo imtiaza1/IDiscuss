@@ -74,7 +74,6 @@ The system is built using the following technologies:
 
 ## 🙌 Acknowledgements
 
-Special thanks to the tutorial creators on YouTube for the guidance and structure used in building this project.
 The design is based on a random template found online and has been replicated for learning purposes.
 
 ---

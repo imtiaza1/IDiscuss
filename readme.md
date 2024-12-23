@@ -74,7 +74,7 @@ The system is built using the following technologies:
 
 ## 🙌 Acknowledgements
 
-The design is based on a random template found online and has been replicated for learning purposes.
+The design is inspired by a template found online, which I have recreated from scratch for learning purposes.
 
 ---
 
